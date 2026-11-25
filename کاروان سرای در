@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>پادکست گلپا شو</title>
+    <meta name="theme-color" content="#e9dcc3">
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.0.3/Vazirmatn-font-face.css">
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        html { -webkit-text-size-adjust: 100%; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: max(20px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+                     max(20px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+            font-family: 'Vazirmatn', Tahoma, sans-serif;
+            color: #3a2f25;
+            text-align: center;
+            background-color: #e9dcc3;
+            background-image:
+                radial-gradient(ellipse at center, rgba(255, 248, 230, .8) 0%, rgba(255, 248, 230, 0) 60%),
+                radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 55%, rgba(90, 50, 15, .35) 100%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%238a4b0f' stroke-opacity='.13' stroke-width='1'%3E%3Crect x='20' y='20' width='40' height='40'/%3E%3Crect x='20' y='20' width='40' height='40' transform='rotate(45 40 40)'/%3E%3Ccircle cx='40' cy='40' r='7'/%3E%3Cpath d='M0 0L80 80M80 0L0 80' stroke-opacity='.06'/%3E%3C/g%3E%3C/svg%3E");
+            background-attachment: fixed;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 440px;
+            overflow: hidden;
+            background: #fffcf5;
+            border-radius: 28px;
+            box-shadow:
+                0 0 0 1px rgba(138, 75, 15, .18),
+                0 4px 8px rgba(70, 40, 10, .1),
+                0 24px 50px rgba(70, 40, 10, .28);
+            animation: settle .8s ease both;
+        }
+
+        /* ---------- سربرگ ثابت ---------- */
+        .top {
+            position: relative;
+            height: 118px;
+            background:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cg fill='none' stroke='%23fff' stroke-opacity='.25'%3E%3Crect x='11' y='11' width='22' height='22' transform='rotate(45 22 22)'/%3E%3Ccircle cx='22' cy='22' r='3.5'/%3E%3C/g%3E%3C/svg%3E"),
+                linear-gradient(135deg, #e08a1e 0%, #c2620c 55%, #a8500a 100%);
+        }
+        .top::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 120% at 50% 100%, rgba(255, 236, 190, .45), transparent 70%);
+        }
+
+        .badge {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            z-index: 1;
+            padding: 4px 12px;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #7a410c;
+            background: rgba(255, 252, 245, .9);
+            border-radius: 999px;
+        }
+        .badge:empty { display: none; }
+
+        .emblem {
+            position: absolute;
+            left: 50%;
+            bottom: -40px;
+            z-index: 2;
+            display: grid;
+            place-items: center;
+            width: 84px;
+            height: 84px;
+            transform: translateX(-50%);
+            color: #b45309;
+            background: radial-gradient(circle at 35% 30%, #fffdf7, #f8e8c6);
+            border-radius: 50%;
+            box-shadow: 0 0 0 5px #fffcf5, 0 0 0 6px rgba(138, 75, 15, .22), 0 8px 18px rgba(90, 50, 15, .3);
+        }
+        .emblem svg { width: 38px; height: 38px; }
+
+        /* ---------- محتوا ---------- */
+        .content { padding: 54px clamp(20px, 6vw, 32px) clamp(24px, 6vw, 32px); }
+
+        .episode {
+            margin: 0 0 4px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #9a6a3a;
+        }
+        .episode:empty { display: none; }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: clamp(22px, 6vw, 27px);
+            font-weight: 800;
+            line-height: 1.7;
+            color: #b45309;
+        }
+
+        .desc {
+            margin: 0 auto 22px;
+            max-width: 36ch;
+            font-size: clamp(14.5px, 3.9vw, 16px);
+            line-height: 2.1;
+            color: #6a5a4a;
+        }
+
+        /* ---------- پخش‌کننده ---------- */
+        .player {
+            padding: 16px 16px 12px;
+            background: linear-gradient(180deg, #fbf0da, #f6e6c6);
+            border: 1px solid rgba(138, 75, 15, .18);
+            border-radius: 20px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, .8);
+        }
+
+        .wave {
+            position: relative;
+            height: 56px;
+            direction: ltr;
+        }
+        .bars {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            height: 100%;
+            pointer-events: none;
+        }
+        .bars span {
+            flex: 1;
+            min-width: 2px;
+            border-radius: 3px;
+            background: rgba(138, 75, 15, .24);
+            transition: background .15s;
+        }
+        .bars span.on { background: #b45309; }
+
+        .seek {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .wave:focus-within { outline: 3px solid #2563eb; outline-offset: 4px; border-radius: 8px; }
+
+        .times {
+            display: flex;
+            justify-content: space-between;
+            margin: 6px 2px 0;
+            direction: ltr;
+            font-size: 12.5px;
+            font-variant-numeric: tabular-nums;
+            color: #7a6652;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 6px;
+            direction: ltr;
+        }
+
+        .ctl {
+            display: grid;
+            place-items: center;
+            width: 46px;
+            height: 46px;
+            padding: 0;
+            color: #8a4b0f;
+            background: transparent;
+            border: 0;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background .2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .ctl:hover { background: rgba(180, 83, 9, .1); }
+        .ctl svg { width: 27px; height: 27px; }
+
+        .play {
+            display: grid;
+            place-items: center;
+            width: 66px;
+            height: 66px;
+            padding: 0;
+            color: #fff;
+            background: linear-gradient(145deg, #d97706, #b45309);
+            border: 0;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #92400e, 0 10px 20px rgba(180, 83, 9, .35);
+            transition: transform .15s, box-shadow .15s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .play:active { transform: translateY(2px); box-shadow: 0 1px 0 #92400e, 0 4px 10px rgba(180, 83, 9, .3); }
+        .play svg { width: 28px; height: 28px; }
+        .play .i-pause, .is-playing .play .i-play { display: none; }
+        .is-playing .play .i-pause { display: block; }
+
+        .ctl:focus-visible, .play:focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
+
+        /* ---------- دکمه نقشه ---------- */
+        .map-btn {
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 54px;
+            margin-top: 22px;
+            padding: 10px 26px 10px 22px;
+            font-family: inherit;
+            font-size: 15.5px;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            background: linear-gradient(180deg, #3b74f0, #2563eb);
+            border-radius: 16px;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, .3),
+                0 3px 0 #1d4ed8,
+                0 12px 20px rgba(37, 99, 235, .28);
+            transition: filter .2s, transform .15s, box-shadow .15s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .map-btn .pin {
+            display: grid;
+            place-items: center;
+            width: 32px;
+            height: 32px;
+            flex: none;
+            background: rgba(255, 255, 255, .2);
+            border-radius: 50%;
+        }
+        .map-btn svg { width: 17px; height: 17px; }
+        .map-btn:hover { filter: brightness(1.08); }
+        .map-btn:active { transform: translateY(2px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .3), 0 1px 0 #1d4ed8, 0 5px 10px rgba(37, 99, 235, .28); }
+        .map-btn:focus-visible { outline: 3px solid #93c5fd; outline-offset: 3px; }
+
+        @media (max-width: 480px) { .map-btn { display: flex; width: 100%; } }
+        @media (max-height: 680px) { body { align-items: flex-start; } }
+
+        @keyframes settle {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: none; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            * { animation: none !important; transition: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="container" id="card">
+        <div class="top">
+            <span class="badge" id="badge"></span>
+            <div class="emblem" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 14.5a3.5 3.5 0 0 0 3.5-3.5V6a3.5 3.5 0 0 0-7 0v5a3.5 3.5 0 0 0 3.5 3.5Zm6-3.5a6 6 0 0 1-12 0H4.5a7.5 7.5 0 0 0 6.75 7.46V21h1.5v-2.54A7.5 7.5 0 0 0 19.5 11H18Z"/></svg>
+            </div>
+        </div>
+
+        <div class="content">
+            <p class="episode" id="episode"></p>
+            <h1 id="title"></h1>
+            <p class="desc" id="desc"></p>
+
+            <div class="player">
+                <audio id="audio" preload="none"></audio>
+
+                <div class="wave">
+                    <div class="bars" id="bars" aria-hidden="true"></div>
+                    <input class="seek" id="seek" type="range" min="0" max="100" step="0.1" value="0" aria-label="موقعیت پخش">
+                </div>
+                <div class="times"><span id="cur">0:00</span><span id="dur">0:00</span></div>
+
+                <div class="controls">
+                    <button class="ctl" id="back" type="button" aria-label="۱۵ ثانیه به عقب">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4v4.5H8"/><text x="12" y="15.2" text-anchor="middle" font-size="7.5" font-weight="700" fill="currentColor" stroke="none">15</text></svg>
+                    </button>
+                    <button class="play" id="toggle" type="button" aria-label="پخش و توقف">
+                        <svg class="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.2v13.6a1 1 0 0 0 1.5.86l11-6.8a1 1 0 0 0 0-1.72l-11-6.8A1 1 0 0 0 8 5.2Z"/></svg>
+                        <svg class="i-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4.2" height="14" rx="1.2"/><rect x="13.8" y="5" width="4.2" height="14" rx="1.2"/></svg>
+                    </button>
+                    <button class="ctl" id="fwd" type="button" aria-label="۱۵ ثانیه به جلو">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12a8.5 8.5 0 1 1-2.6-6.1"/><path d="M20.5 4v4.5H16"/><text x="12" y="15.2" text-anchor="middle" font-size="7.5" font-weight="700" fill="currentColor" stroke="none">15</text></svg>
+                    </button>
+                </div>
+            </div>
+
+            <a id="map" href="#" target="_blank" rel="noopener noreferrer" class="map-btn">
+                <span class="pin">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z"/></svg>
+                </span>
+                <span id="mapText"></span>
+            </a>
+        </div>
+    </main>
+
+    <script>
+        /* ==========================================================
+           ✏️  فقط همین بخش را برای هر پادکست جدید عوض کنید
+           ========================================================== */
+        var PODCAST = {
+            badge:       'پادکست',                               // برچسب بالای صفحه (خالی = مخفی)
+            episode:     '',                                     // مثلاً: 'قسمت ۲' (خالی = مخفی)
+            title:       'پادکست اختصاصی گلپا شو',
+            description: 'به روایت صوتی ما درباره کاروانسرای دُرّ گوش دهید و مسیر دسترسی را روی نقشه ببینید.',
+            audio:       'https://satirastore.ir/razname/dor.mp3',
+            mapUrl:      'https://nshn.ir/0arbSfHY5xX5q8',
+            mapText:     'مسیریابی در نقشه (نشان)',
+            pageTitle:   'پادکست گلپا شو - کاروانسرای دُرّ '            // عنوان تب مرورگر
+        };
+        /* ========================================================== */
+
+        (function () {
+            var $ = function (id) { return document.getElementById(id); };
+
+            document.title = PODCAST.pageTitle || PODCAST.title;
+            $('badge').textContent = PODCAST.badge;
+            $('episode').textContent = PODCAST.episode;
+            $('title').textContent = PODCAST.title;
+            $('desc').textContent = PODCAST.description;
+            $('mapText').textContent = PODCAST.mapText;
+            $('map').href = PODCAST.mapUrl;
+
+            var a = $('audio'), card = $('card'), seek = $('seek'), barsBox = $('bars');
+            var src = document.createElement('source');
+            src.src = PODCAST.audio; src.type = 'audio/mpeg';
+            a.appendChild(src);
+
+            /* شکل موج صوتی (ثابت) */
+            var N = 46, bars = [];
+            for (var i = 0; i < N; i++) {
+                var h = 22 + 40 * Math.abs(Math.sin(i * 0.7) * Math.cos(i * 0.23 + 1)) + 22 * Math.abs(Math.sin(i * 1.9));
+                var s = document.createElement('span');
+                s.style.height = Math.min(100, h) + '%';
+                barsBox.appendChild(s); bars.push(s);
+            }
+
+            function fmt(t) {
+                if (!isFinite(t)) return '0:00';
+                var m = Math.floor(t / 60), r = Math.floor(t % 60);
+                return m + ':' + (r < 10 ? '0' : '') + r;
+            }
+            function paint() {
+                var p = a.duration ? a.currentTime / a.duration : 0;
+                var on = Math.round(p * N);
+                for (var i = 0; i < N; i++) bars[i].classList.toggle('on', i < on);
+                seek.value = p * 100;
+                $('cur').textContent = fmt(a.currentTime);
+            }
+
+            $('toggle').onclick = function () { a.paused ? a.play() : a.pause(); };
+            $('back').onclick = function () { a.currentTime = Math.max(0, a.currentTime - 15); };
+            $('fwd').onclick = function () { a.currentTime = Math.min(a.duration || 0, a.currentTime + 15); };
+            seek.addEventListener('input', function () {
+                if (a.duration) { a.currentTime = (seek.value / 100) * a.duration; }
+                paint();
+            });
+
+            a.addEventListener('timeupdate', paint);
+            a.addEventListener('loadedmetadata', function () { $('dur').textContent = fmt(a.duration); });
+            a.addEventListener('play', function () { card.classList.add('is-playing'); });
+            ['pause', 'ended'].forEach(function (e) {
+                a.addEventListener(e, function () { card.classList.remove('is-playing'); });
+            });
+        })();
+    </script>
+</body>
+</html>
